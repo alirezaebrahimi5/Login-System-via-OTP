@@ -12,12 +12,16 @@ add user model and profile model :
 - add signals.py
 - change the apps.py to know about signals
 - add serializers.py
-- add Login and Logout functionality in views.py
-- add urls.py to separate the endpoints of the app in to itself
+- add serializer classes into views.py
+- add redux-thunk & redux-devtools-extension into frontend folder via npm command
+- add object --> "proxy":"http://127.0.0.1:8000" into the package.json file to reactify all routes
 
 add OTP reset link :
 
 - add reset password link
-- add utils.py to control the message from views.py
-- add tasks.py to ensure all users have short mount of time to reset their password
+- add utils.py to control the message for views.py
 - add verification endpoint
+
+add React components for frontend :
+
+- add Login and Register components
