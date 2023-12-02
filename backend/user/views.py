@@ -49,7 +49,9 @@ class AuthViewsets(viewsets.GenericViewSet):
         return Response({"success": True,
                          "message": "Temporary password sent to your mobile!"}, status=200)
 
-    @action(methods=['POST'], detail=False, serializer_class=CreatePasswordFromResetOTPSerializer, url_path='create-password')
+    @action(methods=['POST'], detail=False,
+            serializer_class=CreatePasswordFromResetOTPSerializer,
+            url_path='create-password')
     def create_password(self, request, pk=None):
         """Create a new password given the reset OTP sent to user phone number"""
         serializer = self.get_serializer(data=request.data)
@@ -60,7 +62,8 @@ class AuthViewsets(viewsets.GenericViewSet):
             return Response({'success': False, 'errors': 'Invalid password reset otp'}, status=400)
         token.reset_user_password(request.data['new_password'])
         token.delete()
-        return Response({'success': True, 'message': 'Password successfully reset'}, status=status.HTTP_200_OK)
+        return Response({'success': True, 'message': 'Password successfully reset'},
+                        status=status.HTTP_200_OK)
 
     @extend_schema(
         responses={
@@ -85,3 +88,101 @@ class AuthViewsets(viewsets.GenericViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({"success": True, "message": "Acount Verification Successful"}, status=200)
+
+
+class PasswordChangeView(viewsets.GenericViewSet):
+    '''Allows password change to authenticated user.'''
+    serializer_class = PasswordChangeSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        context = {"request": request}
+        serializer = self.get_serializer(data=request.data, context=context)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"message": "Your password has been updated."}, status.HTTP_200_OK)
+
+
+class CreateTokenView(ObtainAuthToken):
+    """Create a new auth token for user"""
+
+    serializer_class = AuthTokenSerializer
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(
+            data=request.data, context={"request": request}
+        )
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data["user"]
+        try:
+            token, created = Token.objects.get_or_create(user=user)
+            return Response(
+                {"token": token.key, "created": created, "roles": user.roles},
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            return Response({"message": str(e)}, 500)
+
+
+class UserViewsets(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = ListUserSerializer
+    permission_classes = [IsAuthenticated]
+    http_method_names = ["get", "post", "patch", "delete"]
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    filterset_class = UserFilter
+    search_fields = ["email", "firstname", "lastname", "phone"]
+    ordering_fields = [
+        "created_at",
+        "email",
+        "firstname",
+        "lastname",
+        "phone",
+    ]
+
+    def get_queryset(self):
+        user: User = self.request.user
+        if user.is_admin:
+            return super().get_queryset().all()
+        return super().get_queryset().filter(id=user.id)
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return OnboardUserSerializer
+        if self.action in ["partial_update", "update"]:
+            return UpdateUserSerializer
+        return super().get_serializer_class()
+
+    def get_permissions(self):
+        permission_classes = self.permission_classes
+        if self.action in ["create"]:
+            permission_classes = [AllowAny]
+        elif self.action in ["list", "retrieve", "partial_update", "update"]:
+            permission_classes = [IsAuthenticated]
+        # elif self.action in ["destroy"]:
+        #     permission_classes = [IsAdmin]
+        return [permission() for permission in permission_classes]
+    
+
+    @extend_schema(
+        responses={
+            200: inline_serializer(
+                name='VerificationStatus',
+                fields={
+                    "success": serializers.BooleanField(default=True),
+                    "message": serializers.CharField(default="OTP sent for verification!")
+                }
+            ),
+        },
+        description="Sign up with a validate phone number. i.e. 08130303030 or +2348130303030"
+    )
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"success": True, "message": "OTP sent for verification!"}, status=200)
