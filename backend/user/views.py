@@ -15,3 +15,10 @@ from .serializers import (AuthTokenSerializer,OnboardUserSerializer,
                           ListUserSerializer, PasswordChangeSerializer,
                           AccountVerificationSerializer,InitiatePasswordResetSerializer,
                           UpdateUserSerializer)
+from .filters import UserFilter
+from .enums import TokenEnum
+
+
+class CustomObtainTokenPairView(TokenObtainPairView):
+    """Authentice with phone number and password"""
+    serializer_class = CustomObtainTokenPairSerializer
