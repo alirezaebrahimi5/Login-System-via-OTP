@@ -81,12 +81,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     verified   = models.BooleanField(default=False)
     
     USERNAME_FIELD = "phone"
-    REQUIRED_FIELDS = ["email", "first_name", "last_name"]
+    REQUIRED_FIELDS = ["email", "firstname", "lastname"]
     
     objects = AllUser()
 
     class Meta:
         ordering = ("-created_at",)
+    
+    @property
+    def fullName(self):
+        return str(self.firstname) + ' ' + str(self.lastname)
 
     def __str__(self) -> str:
         return self.phone

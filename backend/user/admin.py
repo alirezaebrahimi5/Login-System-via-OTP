@@ -1,19 +1,18 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django_jalali.admin.filters import JDateFieldListFilter
 
 from .models import User, Token, Profile
 
 
 class Admin(UserAdmin):
-    list_display = ('phone', 'email', 'fullName', 'is_locked' 'is_active', 'pk', 'joined_at')
+    list_display = ('phone', 'email', 'fullName', 'is_locked', 'is_active', 'pk', 'created_at')
     filter_horizontal = ()
-    list_filter = ('joined_at', 'is_active')
+    list_filter = ('created_at', 'is_active')
     fieldsets = ()
     search_fields = ('email', 'phone', 'fullName')
     list_display_links = ('phone', 'email')
     # This line below added because 'ordering' attribute need a dependency
-    ordering = ('email', 'joined_at')
+    ordering = ('email', 'created_at')
 
 
 class TokenAdmin(admin.ModelAdmin):
