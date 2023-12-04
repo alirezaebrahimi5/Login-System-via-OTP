@@ -7,7 +7,7 @@ from rest_framework import exceptions, serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .enums import TokenEnum
-from .models import PendingUser, Token, User
+from .models import PendingUser, Token, User, Profile
 from .utils import generate_otp
 
 
@@ -253,3 +253,15 @@ class OnboardUserSerializer(serializers.Serializer):
         }
         # send_phone_notification(message_info)
         return user, message_info
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['id', 
+                  'user',
+                  'phone',
+                  'email',
+                  'first_name',
+                  'last_name',
+                  ]

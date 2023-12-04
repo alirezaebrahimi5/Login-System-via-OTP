@@ -14,7 +14,7 @@ from .serializers import (AuthTokenSerializer,OnboardUserSerializer,
                           CustomObtainTokenPairSerializer, EmailSerializer,
                           ListUserSerializer, PasswordChangeSerializer,
                           AccountVerificationSerializer,InitiatePasswordResetSerializer,
-                          UpdateUserSerializer)
+                          UpdateUserSerializer, ProfileSerializer)
 from .filters import UserFilter
 from .enums import TokenEnum
 
@@ -186,3 +186,11 @@ class UserViewsets(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({"success": True, "message": "OTP sent for verification!"}, status=200)
+
+
+class ViewProfile(viewsets.ModelViewSet):
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)

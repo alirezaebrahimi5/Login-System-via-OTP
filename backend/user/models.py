@@ -70,7 +70,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     firstname  = models.CharField(max_length=255)
     lastname   = models.CharField(max_length=255)
     image      = models.FileField(upload_to="users/", blank=True, null=True)
-    phone      = models.CharField(max_length=30, unique=True, blank=True, null=True)
+    phone      = models.CharField(max_length=30, unique=True)
     is_locked  = models.BooleanField(default=False)
     is_staff   = models.BooleanField(default=False)
     is_active  = models.BooleanField(default=False)
