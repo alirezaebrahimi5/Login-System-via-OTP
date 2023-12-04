@@ -167,7 +167,6 @@ class UserViewsets(viewsets.ModelViewSet):
         # elif self.action in ["destroy"]:
         #     permission_classes = [IsAdmin]
         return [permission() for permission in permission_classes]
-    
 
     @extend_schema(
         responses={
