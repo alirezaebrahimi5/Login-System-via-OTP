@@ -173,3 +173,7 @@ class Profile(models.Model):
     
     def __str__(self) -> str:
         return f"{self.user} {self.email}"
+    
+    @property
+    def fullName(self):
+        return str(self.first_name) + ' ' + str(self.last_name)
