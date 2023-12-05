@@ -5,7 +5,6 @@ import './bootstrap.min.css'
 function Home() {
   return (
     <div>
-      <div></div>
 
       <h1 class="col-12 text-align-center">
         Hello world!
