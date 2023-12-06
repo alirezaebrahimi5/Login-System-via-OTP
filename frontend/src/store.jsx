@@ -1,6 +1,5 @@
 import { configureStore, combineReducers, applyMiddleware } from 'redux'
-import thunk from 'redux-tuhnk'
-import {composeWithDevTools} from 'redux-devtools-extension'
+import thunk from 'redux-thunk'
 
 
 const reducer = combineReducers({})
@@ -9,10 +8,7 @@ const reducer = combineReducers({})
 const initialState = {}
 
 
-const middleware = [thunk]
-
-
-const store = configureStore(reducer, initialState, composeWithDevTools(applyMiddleware(...middleware)))
+const store = configureStore(reducer, initialState)
 
 
 export default store
