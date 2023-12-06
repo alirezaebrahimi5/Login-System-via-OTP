@@ -118,7 +118,7 @@ class CreateTokenView(ObtainAuthToken):
         try:
             token, created = Token.objects.get_or_create(user=user)
             return Response(
-                {"token": token.key, "created": created, "roles": user.roles},
+                {"token": token.key, "created": created},
                 status=status.HTTP_200_OK,
             )
         except Exception as e:
@@ -136,12 +136,12 @@ class UserViewsets(viewsets.ModelViewSet):
         filters.OrderingFilter,
     ]
     filterset_class = UserFilter
-    search_fields = ["email", "firstname", "lastname", "phone"]
+    search_fields = ["email", "first_name", "last_name", "phone"]
     ordering_fields = [
         "created_at",
         "email",
-        "firstname",
-        "lastname",
+        "first_name",
+        "last_name",
         "phone",
     ]
 

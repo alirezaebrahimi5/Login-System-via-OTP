@@ -34,10 +34,9 @@ class CustomObtainTokenPairSerializer(TokenObtainPairSerializer):
                 _('Account not verified.'), code='authentication')
         token = super().get_token(user)
         token.id = user.id
-        token['firstname'] = user.firstname
-        token['lastname'] = user.lastname
+        token['first_name'] = user.first_name
+        token['last_name'] = user.last_name
         token["email"] = user.email
-        token["roles"] = user.roles
         return token
 
 
@@ -159,8 +158,8 @@ class ListUserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             "id",
-            "firstname",
-            "lastname",
+            "first_name",
+            "last_name",
             "email",
             "image",
             "verified",
@@ -182,8 +181,8 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             "id",
-            "firstname",
-            "lastname",
+            "first_name",
+            "last_name",
             "image",
             "verified",
             "roles"
@@ -216,8 +215,8 @@ class BasicUserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "firstname",
-            "lastname",
+            "first_name",
+            "last_name",
         ]
 
 

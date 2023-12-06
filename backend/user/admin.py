@@ -21,7 +21,7 @@ class TokenAdmin(admin.ModelAdmin):
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['user', 'email', 'pk']
+    list_display = ['user', 'email', 'pk', 'fullName']
     search_fields = ('phone', 'user')
     sortable_by = ('pk', 'user')
 

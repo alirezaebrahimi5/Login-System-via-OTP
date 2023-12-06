@@ -8,6 +8,7 @@ function Home() {
 
       <h1 class="col-12 text-align-center">
         Hello world!
+        You are in home!
       </h1>
     </div>
   )

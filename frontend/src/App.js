@@ -8,13 +8,12 @@ import VerifyToken from './components/VerifyToken';
 function App() {
   return (
     <div className="App">
-      <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/password-change" element={<PasswordChange />} />
-        <Route path="/token/verify/" element={<VerifyToken />} />
-        {/* Add more routes for other components here */}
-      </Routes>
+      <BrowserRouter>
+      </BrowserRouter>
+      
+      <h1>
+        App components
+      </h1>
     </div>
   );
 }

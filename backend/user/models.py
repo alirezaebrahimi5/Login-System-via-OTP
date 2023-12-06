@@ -67,8 +67,8 @@ class AllUser(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     email      = models.EmailField(unique=True)
     password   = models.CharField(max_length=255, null=True)
-    firstname  = models.CharField(max_length=255)
-    lastname   = models.CharField(max_length=255)
+    first_name  = models.CharField(max_length=255)
+    last_name   = models.CharField(max_length=255)
     image      = models.FileField(upload_to="users/", blank=True, null=True)
     phone      = models.CharField(max_length=30, unique=True)
     is_locked  = models.BooleanField(default=False)
@@ -81,7 +81,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     verified   = models.BooleanField(default=False)
     
     USERNAME_FIELD = "phone"
-    REQUIRED_FIELDS = ["email", "firstname", "lastname"]
+    REQUIRED_FIELDS = ["email", "first_name", "last_name"]
     
     objects = AllUser()
 
@@ -90,7 +90,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     @property
     def fullName(self):
-        return str(self.firstname) + ' ' + str(self.lastname)
+        return str(self.first_name) + ' ' + str(self.last_name)
 
     def __str__(self) -> str:
         return self.phone
