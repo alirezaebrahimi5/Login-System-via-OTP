@@ -19,10 +19,10 @@ class AllUser(BaseUserManager):
             raise ValueError('کاربر باید شماره تلفن داشته باشد')
         
         if not first_name:
-            raise ValueError('کاربر باید شماره نام داشته باشد')
+            raise ValueError('کاربر باید نام داشته باشد')
         
         if not last_name:
-            raise ValueError('کاربر باید شماره نام خانوادگی داشته باشد')
+            raise ValueError('کاربر باید نام خانوادگی داشته باشد')
 
         user = self.model(
             email=self.normalize_email(email),
@@ -67,18 +67,24 @@ class AllUser(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     email      = models.EmailField(unique=True)
     password   = models.CharField(max_length=255, null=True)
-    first_name  = models.CharField(max_length=255)
-    last_name   = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255)
+    last_name  = models.CharField(max_length=255)
     image      = models.FileField(upload_to="users/", blank=True, null=True)
     phone      = models.CharField(max_length=30, unique=True)
     is_locked  = models.BooleanField(default=False)
     is_staff   = models.BooleanField(default=False)
-    is_active  = models.BooleanField(default=False)
+    
+    # If it is set to False, users can't login to their accounts with their credentials until verified it
+    is_active  = models.BooleanField(default=True)
+    
+    
     is_admin   = models.BooleanField(default=False)
     last_login = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    verified   = models.BooleanField(default=False)
+    
+    # If it is set to False, users need to verified their accounts with OTP
+    verified   = models.BooleanField(default=True)
     
     USERNAME_FIELD = "phone"
     REQUIRED_FIELDS = ["email", "first_name", "last_name"]
@@ -111,7 +117,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class AuditableModel(models.Model):
-    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
+    id         = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -120,9 +126,9 @@ class AuditableModel(models.Model):
     
 
 class PendingUser(AuditableModel):
-    phone =  models.CharField(max_length=20)
+    phone             =  models.CharField(max_length=20)
     verification_code = models.CharField(max_length=8, blank=True, null=True)
-    password = models.CharField(max_length=255, null=True)
+    password          = models.CharField(max_length=255, null=True)
 
 
     def __str__(self):
@@ -140,10 +146,9 @@ class PendingUser(AuditableModel):
 
 
 class Token(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
-    token = models.CharField(max_length=8)
+    id         = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user       = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    token      = models.CharField(max_length=8)
     token_type = models.CharField(max_length=100, choices=TOKEN_TYPE_CHOICE)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -165,11 +170,11 @@ class Token(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='کاربر')
-    email = models.EmailField(verbose_name='پست الکترونیکی')
-    phone = models.CharField(max_length=11, verbose_name='شماره تماس')
-    first_name  = models.CharField(max_length=30, null=True, blank=True, verbose_name='نام')
-    last_name   = models.CharField(max_length=50, null=True, blank=True, verbose_name='نام خانوادگی')
+    user       = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='کاربر')
+    email      = models.EmailField(verbose_name='پست الکترونیکی')
+    phone      = models.CharField(max_length=11, verbose_name='شماره تماس')
+    first_name = models.CharField(max_length=30, null=True, blank=True, verbose_name='نام')
+    last_name  = models.CharField(max_length=50, null=True, blank=True, verbose_name='نام خانوادگی')
     
     def __str__(self) -> str:
         return f"{self.user} {self.email}"

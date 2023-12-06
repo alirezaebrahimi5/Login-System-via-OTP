@@ -5,7 +5,7 @@ from .models import User, Token, Profile
 
 
 class Admin(UserAdmin):
-    list_display = ('phone', 'email', 'fullName', 'is_locked', 'is_active', 'pk', 'created_at')
+    list_display = ('phone', 'email', 'fullName', 'is_locked', 'is_active', 'verified', 'created_at')
     filter_horizontal = ()
     list_filter = ('created_at', 'is_active')
     fieldsets = ()

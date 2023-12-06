@@ -9,12 +9,7 @@ from rest_framework.settings import api_settings
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import User, Token, Profile
-from .serializers import (AuthTokenSerializer,OnboardUserSerializer,
-                          CreatePasswordFromResetOTPSerializer,
-                          CustomObtainTokenPairSerializer, EmailSerializer,
-                          ListUserSerializer, PasswordChangeSerializer,
-                          AccountVerificationSerializer,InitiatePasswordResetSerializer,
-                          UpdateUserSerializer, ProfileSerializer)
+from .serializers import *
 from .filters import UserFilter
 from .enums import TokenEnum
 

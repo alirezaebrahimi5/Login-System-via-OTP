@@ -164,12 +164,10 @@ class ListUserSerializer(serializers.ModelSerializer):
             "image",
             "verified",
             "created_at",
-            "roles",
         ]
 
         extra_kwargs = {
             "verified": {"read_only": True},
-            "roles": {"read_only": True},
         }
 
     def to_representation(self, instance):
@@ -185,23 +183,17 @@ class UpdateUserSerializer(serializers.ModelSerializer):
             "last_name",
             "image",
             "verified",
-            "roles"
         ]
         extra_kwargs = {
             "last_login": {"read_only": True},
             "verified": {"read_only": True},
-            "roles": {"required": False},
         }
 
     def validate(self, attrs: dict):
         """Only allow admin to modify/assign role"""
         auth_user: User = self.context["request"].user
-        new_role_assignment = attrs.get("roles", None)
-        if new_role_assignment and auth_user.is_admin:
-            pass
-        else:
-            attrs.pop('roles', None)
-        return super().validate(attrs)
+        if auth_user.is_admin:            
+            return super().validate(attrs)
 
     def update(self, instance, validated_data):
         """Prevent user from updating password"""
