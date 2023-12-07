@@ -7,8 +7,7 @@ function Home() {
     <div>
 
       <h1 class="col-12 text-align-center">
-        Hello world!
-        You are in home!
+        Home.jsx
       </h1>
     </div>
   )

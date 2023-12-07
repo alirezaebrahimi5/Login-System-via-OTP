@@ -94,6 +94,7 @@ class PasswordChangeView(viewsets.GenericViewSet):
         context = {"request": request}
         serializer = self.get_serializer(data=request.data, context=context)
         serializer.is_valid(raise_exception=True)
+        print(serializer)
         serializer.save()
         return Response({"message": "Your password has been updated."}, status.HTTP_200_OK)
 
@@ -112,6 +113,7 @@ class CreateTokenView(ObtainAuthToken):
         user = serializer.validated_data["user"]
         try:
             token, created = Token.objects.get_or_create(user=user)
+            print(token,created)
             return Response(
                 {"token": token.key, "created": created},
                 status=status.HTTP_200_OK,
