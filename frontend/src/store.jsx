@@ -1,14 +1,15 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import userLoginReducer from "./reducers/userReducer";
 
+const reducer = combineReducers({ userLogin: userLoginReducer });
 
-const reducer = combineReducers({})
+const userInfoFromStorage = localStorage.getItem("userInfo")
+  ? JSON.parse(localStorage.getItem("userInfo"))
+  : null;
 
+const initialState = { userInfo: { userInfoFromStorage } };
 
-const initialState = {}
+const store = createStore(reducer, initialState);
 
-
-const store = createStore(reducer, initialState)
-
-
-export default store
+export default store;
