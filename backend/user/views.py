@@ -1,12 +1,13 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema, inline_serializer
-from rest_framework import filters, serializers, status, viewsets
+from rest_framework import filters, serializers, status, viewsets, generics
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import User, Token, Profile
 from .serializers import *
@@ -190,3 +191,20 @@ class ViewProfile(viewsets.ModelViewSet):
     
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
+
+
+class UserLogoutAPIView(generics.GenericAPIView):
+    """
+    An endpoint to logout users.
+    """
+
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
