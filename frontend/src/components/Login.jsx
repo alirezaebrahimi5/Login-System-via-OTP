@@ -1,13 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+import login from "../actions/userActions";
 
-function Login() {
+function Login(location, history) {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
 
+  const dispatch = useDispatch();
+
+  const userLogin = useSelector((state) => state.userLogin);
+
+  const redirect = location.search ? location.search.split("=")["1"] : "/";
+
+  const { error, userInfo, loading } = userLogin;
+
+  useEffect(() => {
+    if (userInfo) {
+      history.push(redirect);
+    }
+  }, [history, userInfo, redirect]);
+
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("form submitted");
+    dispatch(login(phone, password));
   };
 
   return (
