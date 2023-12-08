@@ -11,7 +11,7 @@ function Login(location, history) {
 
   const userLogin = useSelector((state) => state.userLogin);
 
-  const redirect = location.search ? location.search.split("=")["1"] : "/";
+  const redirect = location.search ? location.search.split("=")[1] : "/";
 
   const { error, userInfo, loading } = userLogin;
 
@@ -31,6 +31,7 @@ function Login(location, history) {
       <h1>Login Form</h1>
       <form method="post">
         <Form onSubmit={submitHandler}>
+          {error && <h1> {error} </h1>}
           <Form.Group controlId="Phone">
             <Form.Label>Phone Number</Form.Label>
             <Form.Control
