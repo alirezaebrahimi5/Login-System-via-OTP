@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import login from "../actions/userActions";
+import {reset} from "../actions/userActions";
 
-function Login(location, history) {
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
+function Reset(location, history) {
+  const [newPassword, setNewPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
 
   const dispatch = useDispatch();
 
@@ -23,36 +23,36 @@ function Login(location, history) {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(login(phone, password));
+    dispatch(reset(oldPassword, newPassword));
   };
 
   return (
     <div>
-      <h1>Login Form</h1>
+      <h1>Reset Form</h1>
       <form method="post">
         <Form onSubmit={submitHandler}>
           {error && <h1> {error} </h1>}
-          <Form.Group controlId="Phone">
-            <Form.Label>Phone Number</Form.Label>
+          <Form.Group controlId="old_password">
+            <Form.Label>old password</Form.Label>
             <Form.Control
-              type="phone"
-              placeholder="Enter your phone number"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              type="password"
+              placeholder="Enter your old password"
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
             ></Form.Control>
           </Form.Group>
 
-          <Form.Group controlId="Password">
+          <Form.Group controlId="new_password">
             <Form.Control
               type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter new password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
             ></Form.Control>
           </Form.Group>
 
           <Button type="submit" variant="primary">
-            Login
+            Reset
           </Button>
         </Form>
       </form>
@@ -60,4 +60,4 @@ function Login(location, history) {
   );
 }
 
-export default Login;
+export default Reset;

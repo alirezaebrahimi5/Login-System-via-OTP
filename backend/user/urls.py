@@ -13,6 +13,7 @@ router.register("change-password", PasswordChangeView, basename="password-change
 
 urlpatterns = [
     path("login/", CustomObtainTokenPairView.as_view(), name="login"),
+    path("reset/", PasswordChangeView.as_view({'post'}), name="reset"),
     path("token/refresh/", TokenRefreshView.as_view(), name="refresh-token"),
     path("token/verify/", TokenVerifyView.as_view(), name="verify-token"),
     path('logout/', UserLogoutAPIView.as_view(), name='logout'),
