@@ -175,6 +175,7 @@ class Profile(models.Model):
     phone      = models.CharField(max_length=11, verbose_name='شماره تماس')
     first_name = models.CharField(max_length=30, null=True, blank=True, verbose_name='نام')
     last_name  = models.CharField(max_length=50, null=True, blank=True, verbose_name='نام خانوادگی')
+    image      = models.ImageField(upload_to='user/profile', null=True, blank=True)
     
     def __str__(self) -> str:
         return f"{self.user} {self.email}"
